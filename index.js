@@ -33,7 +33,8 @@ const validateProjectName = name => {
 };
 // Validate project name
 validateProjectName(projectName);
-const projectPath = path.resolve(projectName);
+const currentPath = process.cwd();
+const projectPath = path.join(currentPath, projectName);
 // Check if project already exists
 if (fs.existsSync(projectPath)) {
 	throw new Error(`Project ${projectName} already exists.`);
@@ -78,11 +79,11 @@ fs.renameSync(gitignore, newGitignore);
 const envPath = path.join(projectPath, ".env");
 fs.writeFileSync(envPath, `PORT = ${port}`, "utf8");
 // cd projectPath
-execSync(`cd ${projectName}`, { cwd: projectPath, stdio: "inherit" });
+execSync(`cd ${projectName}`, { cwd: currentPath, stdio: "inherit" });
 // Initialize git
-execSync("npm init", { cwd: projectPath, stdio: "inherit" });
-execSync("npm add -A", { cwd: projectPath, stdio: "inherit" });
-execSync(`npm commit -m"initialization"`, { cwd: projectPath, stdio: "inherit" });
+execSync("git init", { cwd: projectPath, stdio: "inherit" });
+execSync("git add -A", { cwd: projectPath, stdio: "inherit" });
+execSync(`git commit -m"initialization"`, { cwd: projectPath, stdio: "inherit" });
 // Install dependencies
 execSync("npm install", { cwd: projectPath, stdio: "inherit" });
 // Start project
