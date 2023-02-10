@@ -33,8 +33,7 @@ const validateProjectName = name => {
 };
 // Validate project name
 validateProjectName(projectName);
-const currentPath = process.cwd();
-const projectPath = path.join(currentPath, projectName);
+const projectPath = path.resolve(projectName);
 // Check if project already exists
 if (fs.existsSync(projectPath)) {
 	throw new Error(`Project ${projectName} already exists.`);
@@ -78,8 +77,6 @@ fs.renameSync(gitignore, newGitignore);
 // Create .env file
 const envPath = path.join(projectPath, ".env");
 fs.writeFileSync(envPath, `PORT = ${port}`, "utf8");
-// cd projectPath
-execSync(`cd ${projectName}`, { cwd: currentPath, stdio: "inherit" });
 // Initialize git
 execSync("git init", { cwd: projectPath, stdio: "inherit" });
 execSync("git add -A", { cwd: projectPath, stdio: "inherit" });
